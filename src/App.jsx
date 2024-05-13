@@ -13,6 +13,7 @@ const App = () => {
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState('');
 
+  
   useEffect(() => {
     blogService.getAll().then((blogs) => {
       setBlogs(blogs);
@@ -64,6 +65,23 @@ const App = () => {
     localStorage.removeItem('loggedUser');
   };
 
+  const handleIncrementLikes = async(blog)=>{
+    try{
+      const updatedBlog = {
+        title: blog.title,
+        author: blog.author.id,
+        url: blog.url,
+        likes : blog.likes + 1
+      }
+      await blogService.updateBlogPost(blog.id,updatedBlog);    
+      const updatedBlogs = await blogService.getAll()
+      setBlogs(updatedBlogs);
+    }
+    catch(exception){
+      console.log(exception);
+    }
+    
+  }
   const newBlogRef = useRef();
 
   return (
@@ -78,7 +96,7 @@ const App = () => {
             <Togglable label="wirte a blogpost" ref = {newBlogRef}>
               <NewBlogForm onSubmit={handleAddBlog} />
             </Togglable>
-            <BlogsList blogs={blogs} />
+            <BlogsList blogs={blogs} handleIncrementLikes = {handleIncrementLikes}/>
           </div>
         ) : (
           <LoginForm onSubmit={handleLogin} />

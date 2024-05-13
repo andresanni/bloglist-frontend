@@ -1,49 +1,47 @@
-import { useState } from "react";
+import { useState } from 'react';
 
-const Blog = ({blog})=>{
+const Blog = ({ blog, handleIncrementLikes }) => {
+  const [fullView, setFullView] = useState(false);
 
-const [fullView, setFullView] = useState(false);
+  const handleFullView = () => {
+    setFullView(!fullView);
+  };
 
-const handleFullView = ()=>{
-  setFullView(!fullView);
-}
+  const blogFullViewStyle = {
+    display: 'flex',
+    flexDirection: 'column',
+    border: '1px solid black',
+  };
 
-const blogFullViewStyle = {
-  display: "flex",
-  flexDirection:"column",
-  border: "1px solid black"
-}
-
-return(
-
-  <div>
-    {
-      fullView ?
-      (
-      <div style={blogFullViewStyle}>
-        <div>
-        {blog.title} 
-        <button onClick = {handleFullView}>hide</button> 
+  return (
+    <div>
+      {fullView ? (
+        <div style={blogFullViewStyle}>
+          <div>
+            {blog.title}
+            <button onClick={handleFullView}>hide</button>
+          </div>
+          <p>{blog.url}</p>
+          <div>
+            likes:{blog.likes}{' '}
+            <button
+              onClick={() => {
+                handleIncrementLikes(blog);
+              }}
+            >
+              like
+            </button>
+          </div>
+          {blog.author.username}
         </div>
-        <p>{blog.url}</p>
+      ) : (
         <div>
-        likes:{blog.likes} <button>like</button>
+          {blog.title}
+          <button onClick={handleFullView}>view</button>
         </div>
-        {blog.author.username}      
-      </div>
-      )
-      :
-      (
-      <div>
-        {blog.title} 
-        <button onClick={handleFullView}>view</button>
-      </div>
-      )
-
-    }
-  </div>  
-)
+      )}
+    </div>
+  );
 };
 
-
-export default Blog
+export default Blog;
