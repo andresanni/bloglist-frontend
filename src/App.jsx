@@ -15,9 +15,12 @@ const App = () => {
 
   
   useEffect(() => {
-    blogService.getAll().then((blogs) => {
-      setBlogs(blogs);
-    });
+    const fetchData= async()=>{
+      const blogs = await blogService.getAll();
+      const sortedBlogs = blogs.slice().sort((a,b)=>b.likes-a.likes);
+      setBlogs(sortedBlogs);
+    }
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -74,8 +77,9 @@ const App = () => {
         likes : blog.likes + 1
       }
       await blogService.updateBlogPost(blog.id,updatedBlog);    
-      const updatedBlogs = await blogService.getAll()
-      setBlogs(updatedBlogs);
+      const updatedBlogs = await blogService.getAll();
+      const sortedBlogs = updatedBlogs.slice().sort((a,b)=>b.likes-a.likes);
+      setBlogs(sortedBlogs);
     }
     catch(exception){
       console.log(exception);
