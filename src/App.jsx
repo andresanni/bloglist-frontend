@@ -13,13 +13,12 @@ const App = () => {
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState('');
 
-  
   useEffect(() => {
-    const fetchData= async()=>{
+    const fetchData = async () => {
       const blogs = await blogService.getAll();
-      const sortedBlogs = blogs.slice().sort((a,b)=>b.likes-a.likes);
+      const sortedBlogs = blogs.slice().sort((a, b) => b.likes - a.likes);
       setBlogs(sortedBlogs);
-    }
+    };
     fetchData();
   }, []);
 
@@ -68,23 +67,35 @@ const App = () => {
     localStorage.removeItem('loggedUser');
   };
 
-  const handleIncrementLikes = async(blog)=>{
-    try{
+  const handleIncrementLikes = async (blog) => {
+    try {
       const updatedBlog = {
         title: blog.title,
         author: blog.author.id,
         url: blog.url,
-        likes : blog.likes + 1
-      }
-      await blogService.updateBlogPost(blog.id,updatedBlog);    
+        likes: blog.likes + 1,
+      };
+      await blogService.updateBlogPost(blog.id, updatedBlog);
       const updatedBlogs = await blogService.getAll();
-      const sortedBlogs = updatedBlogs.slice().sort((a,b)=>b.likes-a.likes);
+      const sortedBlogs = updatedBlogs
+        .slice()
+        .sort((a, b) => b.likes - a.likes);
       setBlogs(sortedBlogs);
-    }
-    catch(exception){
+    } catch (exception) {
       console.log(exception);
     }
-    
+  };
+
+  const handleDelete = async(blog)=>{
+    console.log(blog);
+    if (window.confirm("Do you really want to delete this post?")) {
+      await blogService.deleteBlogPost(blog.id);
+      const updatedBlogs = await blogService.getAll();
+      const sortedBlogs = updatedBlogs
+        .slice()
+        .sort((a, b) => b.likes - a.likes);
+      setBlogs(sortedBlogs);
+    }
   }
   const newBlogRef = useRef();
 
@@ -97,10 +108,15 @@ const App = () => {
           <div>
             <p>{user.username} is logged in</p>
             <button onClick={handleLogout}>logout</button>
-            <Togglable label="wirte a blogpost" ref = {newBlogRef}>
+            <Togglable label="wirte a blogpost" ref={newBlogRef}>
               <NewBlogForm onSubmit={handleAddBlog} />
             </Togglable>
-            <BlogsList blogs={blogs} handleIncrementLikes = {handleIncrementLikes}/>
+            <BlogsList
+              blogs={blogs}
+              handleIncrementLikes={handleIncrementLikes}
+              handleDelete={handleDelete}
+              user = { user }
+            />
           </div>
         ) : (
           <LoginForm onSubmit={handleLogin} />
