@@ -7,6 +7,7 @@ const NewBlogForm = ({onSubmit})=>{
     const handleSubmit = (event)=>{
         event.preventDefault();
         onSubmit(blog);
+        setBlog({url:"", title:""});
     }
     
     return (

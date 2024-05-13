@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import BlogsList from './components/BlogsList';
 import LoginForm from './components/LoginForm';
 import blogService from './services/blogs';
 import loginService from './services/login';
 import Message from './components/Message';
 import NewBlogForm from './components/NewBlogForm';
+import Togglable from './components/Togglable';
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -36,7 +37,7 @@ const App = () => {
     } catch (exception) {
       setMessage('wrong credentials');
       setMessageType('error');
-      
+
       setTimeout(() => {
         setMessage(null);
         setMessageType(null);
@@ -44,38 +45,39 @@ const App = () => {
     }
   };
   const handleAddBlog = async (blog) => {
-    
-    try{
+    try {
+      newBlogRef.current.toggleVisibility();
       await blogService.createBlogPost(blog);
-      setMessage("Blog added");
-      setMessageType("success");
-       setTimeout(() => {
-         setMessage(null);
-         setMessageType(null);
-       }, 5000);
-    }
-    catch(exception){
-      console.log(exception)
+      setMessage('Blog added');
+      setMessageType('success');
+      setTimeout(() => {
+        setMessage(null);
+        setMessageType(null);
+      }, 5000);
+    } catch (exception) {
+      console.log(exception);
     }
   };
-
 
   const handleLogout = () => {
     setUser(null);
     localStorage.removeItem('loggedUser');
   };
+
+  const newBlogRef = useRef();
+
   return (
     <div>
-      <div>
-        {message && <Message type={messageType} message={message} />}
-      </div>
+      <div>{message && <Message type={messageType} message={message} />}</div>
 
       <div>
         {user ? (
           <div>
             <p>{user.username} is logged in</p>
             <button onClick={handleLogout}>logout</button>
-            <NewBlogForm onSubmit={handleAddBlog} />
+            <Togglable label="wirte a blogpost" ref = {newBlogRef}>
+              <NewBlogForm onSubmit={handleAddBlog} />
+            </Togglable>
             <BlogsList blogs={blogs} />
           </div>
         ) : (
