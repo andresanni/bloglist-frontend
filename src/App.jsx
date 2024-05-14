@@ -12,15 +12,16 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState('');
+  const [updateTrigger, setUpdateTrigger] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       const blogs = await blogService.getAll();
-      const sortedBlogs = blogs.slice().sort((a, b) => b.likes - a.likes);
-      setBlogs(sortedBlogs);
+      blogs.sort((a,b)=>b.likes - a.likes);
+      setBlogs(blogs);
     };
     fetchData();
-  }, []);
+  }, [updateTrigger]);
 
   useEffect(() => {
     const loggedUser = window.localStorage.getItem('loggedUser');
@@ -76,11 +77,7 @@ const App = () => {
         likes: blog.likes + 1,
       };
       await blogService.updateBlogPost(blog.id, updatedBlog);
-      const updatedBlogs = await blogService.getAll();
-      const sortedBlogs = updatedBlogs
-        .slice()
-        .sort((a, b) => b.likes - a.likes);
-      setBlogs(sortedBlogs);
+      setUpdateTrigger(prev => !prev);
     } catch (exception) {
       console.log(exception);
     }
@@ -90,11 +87,7 @@ const App = () => {
     console.log(blog);
     if (window.confirm("Do you really want to delete this post?")) {
       await blogService.deleteBlogPost(blog.id);
-      const updatedBlogs = await blogService.getAll();
-      const sortedBlogs = updatedBlogs
-        .slice()
-        .sort((a, b) => b.likes - a.likes);
-      setBlogs(sortedBlogs);
+      setUpdateTrigger(prev=>!prev)
     }
   }
   const newBlogRef = useRef();
