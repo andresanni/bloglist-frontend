@@ -1,8 +1,9 @@
 import { useState } from 'react';
 
-const Blog = ({ blog, handleIncrementLikes, handleDelete , user}) => {
+const Blog = ({ blog, handleIncrementLikes, handleDelete, user }) => {
   const [fullView, setFullView] = useState(false);
 
+  console.log({ blog, user });
   const handleFullView = () => {
     setFullView(!fullView);
   };
@@ -11,9 +12,9 @@ const Blog = ({ blog, handleIncrementLikes, handleDelete , user}) => {
     display: 'flex',
     flexDirection: 'column',
     border: '1px solid black',
-    paddingTop:10,
-    paddingLeft:2,
-    marginBottom: 5
+    paddingTop: 10,
+    paddingLeft: 2,
+    marginBottom: 5,
   };
 
   return (
@@ -21,7 +22,7 @@ const Blog = ({ blog, handleIncrementLikes, handleDelete , user}) => {
       {fullView ? (
         <div style={blogFullViewStyle}>
           <div>
-            {blog.title}
+            <p>{blog.title}</p>
             <button onClick={handleFullView}>hide</button>
           </div>
           <p>{blog.url}</p>
@@ -35,16 +36,29 @@ const Blog = ({ blog, handleIncrementLikes, handleDelete , user}) => {
               like
             </button>
           </div>
-          <div style={{display:"flex", flexDirection:"column",alignItems: "flex-start"}}>
-          {blog.author.username}
-          {
-            (user.id === blog.author.id) && <button onClick={()=>{handleDelete(blog)}}>Delete</button>
-          }          
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'flex-start',
+            }}
+          >
+            <p>{blog.author.username}</p>
+            {user.id === blog.author.id && (
+              <button
+                onClick={() => {
+                  handleDelete(blog);
+                }}
+              >
+                Delete
+              </button>
+            )}
           </div>
         </div>
       ) : (
         <div>
-          {blog.title}
+          <p>{blog.title}</p>
+          <p>{blog.author.username}</p>
           <button onClick={handleFullView}>view</button>
         </div>
       )}
