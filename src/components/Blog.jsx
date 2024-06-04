@@ -18,16 +18,16 @@ const Blog = ({ blog, handleIncrementLikes, handleDelete, user }) => {
   };
 
   return (
-    <div>
+    <div data-testid="blogpost">
       {fullView ? (
         <div style={blogFullViewStyle}>
           <div>
-            <p>{blog.title}</p>
+            <p className="blog-title">{blog.title}</p>
             <button onClick={handleFullView}>hide</button>
           </div>
           <p>{blog.url}</p>
           <div>
-            likes:{blog.likes}{' '}
+            likes:<span data-testid="likes">{blog.likes}</span>{' '}
             <button
               onClick={() => {
                 handleIncrementLikes(blog);

@@ -17,7 +17,7 @@ const App = () => {
   useEffect(() => {
     const fetchData = async () => {
       const blogs = await blogService.getAll();
-      blogs.sort((a,b)=>b.likes - a.likes);
+      blogs.sort((a, b) => b.likes - a.likes);
       setBlogs(blogs);
     };
     fetchData();
@@ -54,6 +54,8 @@ const App = () => {
       await blogService.createBlogPost(blog);
       setMessage('Blog added');
       setMessageType('success');
+      setUpdateTrigger((prev) => !prev);
+
       setTimeout(() => {
         setMessage(null);
         setMessageType(null);
@@ -77,19 +79,19 @@ const App = () => {
         likes: blog.likes + 1,
       };
       await blogService.updateBlogPost(blog.id, updatedBlog);
-      setUpdateTrigger(prev => !prev);
+      setUpdateTrigger((prev) => !prev);
     } catch (exception) {
       console.log(exception);
     }
   };
 
-  const handleDelete = async(blog)=>{
+  const handleDelete = async (blog) => {
     console.log(blog);
-    if (window.confirm("Do you really want to delete this post?")) {
+    if (window.confirm('Do you really want to delete this post?')) {
       await blogService.deleteBlogPost(blog.id);
-      setUpdateTrigger(prev=>!prev)
+      setUpdateTrigger((prev) => !prev);
     }
-  }
+  };
   const newBlogRef = useRef();
 
   return (
@@ -108,7 +110,7 @@ const App = () => {
               blogs={blogs}
               handleIncrementLikes={handleIncrementLikes}
               handleDelete={handleDelete}
-              user = { user }
+              user={user}
             />
           </div>
         ) : (
