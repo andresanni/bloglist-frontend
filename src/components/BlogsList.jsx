@@ -1,6 +1,19 @@
+import { useFetchBlogs } from '../hooks/blogs';
 import Blog from './Blog';
 
-const BlogList = ({ blogs, handleIncrementLikes, handleDelete, user }) => {
+const BlogList = ({ user }) => {
+  
+  const {isLoading, isError, data, error} = useFetchBlogs();
+  
+  if(isLoading){
+    return <div>Loading...</div>
+  }
+
+  if(isError){
+    return <div>Error: {error.message}</div>
+  }
+  
+  const blogs = data;
   return (
     <div>
       <h2>blogs</h2>
@@ -8,8 +21,6 @@ const BlogList = ({ blogs, handleIncrementLikes, handleDelete, user }) => {
         <Blog
           key={blog.id}
           blog={blog}
-          handleIncrementLikes={handleIncrementLikes}
-          handleDelete={handleDelete}
           user = {user}
         />
       ))}

@@ -1,30 +1,18 @@
-import { useState, useEffect, useRef } from 'react';
-import BlogsList from './components/BlogsList';
-import LoginForm from './components/LoginForm';
-import blogService from './services/blogs';
-import loginService from './services/login';
-import Message from './components/Message';
-import NewBlogForm from './components/NewBlogForm';
-import Togglable from './components/Togglable';
+import { useState, useEffect } from "react";
+import BlogsList from "./components/BlogsList";
+import LoginForm from "./components/LoginForm";
+import blogService from "./services/blogs";
+import loginService from "./services/login";
+import Message from "./components/Message";
+import NewBlogForm from "./components/NewBlogForm";
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
-  const [message, setMessage] = useState('');
-  const [messageType, setMessageType] = useState('');
-  const [updateTrigger, setUpdateTrigger] = useState(false);
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState("");
 
   useEffect(() => {
-    const fetchData = async () => {
-      const blogs = await blogService.getAll();
-      blogs.sort((a, b) => b.likes - a.likes);
-      setBlogs(blogs);
-    };
-    fetchData();
-  }, [updateTrigger]);
-
-  useEffect(() => {
-    const loggedUser = window.localStorage.getItem('loggedUser');
+    const loggedUser = window.localStorage.getItem("loggedUser");
     if (loggedUser) {
       const user = JSON.parse(loggedUser);
       setUser(user);
@@ -35,64 +23,24 @@ const App = () => {
   const handleLogin = async (username, password) => {
     try {
       const user = await loginService.login(username, password);
-      localStorage.setItem('loggedUser', JSON.stringify(user));
+      localStorage.setItem("loggedUser", JSON.stringify(user));
       blogService.setToken(user.token);
       setUser(user);
     } catch (exception) {
-      setMessage('wrong credentials');
-      setMessageType('error');
+      setMessage("wrong credentials");
+      setMessageType("error");
 
       setTimeout(() => {
         setMessage(null);
         setMessageType(null);
       }, 5000);
-    }
-  };
-  const handleAddBlog = async (blog) => {
-    try {
-      newBlogRef.current.toggleVisibility();
-      await blogService.createBlogPost(blog);
-      setMessage('Blog added');
-      setMessageType('success');
-      setUpdateTrigger((prev) => !prev);
-
-      setTimeout(() => {
-        setMessage(null);
-        setMessageType(null);
-      }, 5000);
-    } catch (exception) {
-      console.log(exception);
     }
   };
 
   const handleLogout = () => {
     setUser(null);
-    localStorage.removeItem('loggedUser');
+    localStorage.removeItem("loggedUser");
   };
-
-  const handleIncrementLikes = async (blog) => {
-    try {
-      const updatedBlog = {
-        title: blog.title,
-        author: blog.author.id,
-        url: blog.url,
-        likes: blog.likes + 1,
-      };
-      await blogService.updateBlogPost(blog.id, updatedBlog);
-      setUpdateTrigger((prev) => !prev);
-    } catch (exception) {
-      console.log(exception);
-    }
-  };
-
-  const handleDelete = async (blog) => {
-    console.log(blog);
-    if (window.confirm('Do you really want to delete this post?')) {
-      await blogService.deleteBlogPost(blog.id);
-      setUpdateTrigger((prev) => !prev);
-    }
-  };
-  const newBlogRef = useRef();
 
   return (
     <div>
@@ -103,15 +51,8 @@ const App = () => {
           <div>
             <p>{user.username} is logged in</p>
             <button onClick={handleLogout}>logout</button>
-            <Togglable label="wirte a blogpost" ref={newBlogRef}>
-              <NewBlogForm onSubmit={handleAddBlog} />
-            </Togglable>
-            <BlogsList
-              blogs={blogs}
-              handleIncrementLikes={handleIncrementLikes}
-              handleDelete={handleDelete}
-              user={user}
-            />
+            <NewBlogForm />
+            <BlogsList user={user} />
           </div>
         ) : (
           <LoginForm onSubmit={handleLogin} />
