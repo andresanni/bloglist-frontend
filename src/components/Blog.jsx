@@ -1,11 +1,19 @@
-import { useState } from "react";
+import { useState , useEffect} from "react";
 import { useDeleteBlog, useUpdateBlog } from "../hooks/blogs";
+import { useNotification} from '../context/NotificationContext'
 
 const Blog = ({ blog, user }) => {
 
   const [fullView, setFullView] = useState(false);
   const updateBlogMutation = useUpdateBlog();
-  const deleteBlogMutation = useDeleteBlog();
+  const {isSuccess: deleteSuccess, mutate:deleteMutate} = useDeleteBlog();
+  const {setNotification} = useNotification();
+
+  useEffect(()=>{
+    if(deleteSuccess){
+      setNotification("Blogpost deleted", "success")
+    }
+  },[deleteSuccess])
 
   const handleIncrementLikes = () => {
     const incrementedBlog = {
@@ -18,7 +26,7 @@ const Blog = ({ blog, user }) => {
 
   const handleDelete = () => {
     if (window.confirm("Do you really want to delete this post?")) {
-      deleteBlogMutation.mutate(blog.id);
+      deleteMutate(blog.id);
     }
   };
 

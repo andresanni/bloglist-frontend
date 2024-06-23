@@ -1,14 +1,27 @@
-import { useState } from 'react';
+import { useState } from "react";
+import loginService from "../services/login";
+import { useAuth } from "../context/AuthContext";
+import { useNotification } from "../context/NotificationContext";
 
-const LoginForm = ({ onSubmit }) => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+const LoginForm = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const { login } = useAuth();
+  const { setNotification } = useNotification();
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    onSubmit(username, password);
-    setUsername('');
-    setPassword('');
+    try {
+      const user = await loginService.login(username, password);
+      login(user);
+      setUsername("");
+      setPassword("");
+      setNotification("Welcome!", "success");
+    } catch (exception) {
+      setNotification(exception.response.data.error, "error");
+      setUsername("");
+      setPassword("");
+    }
   };
 
   return (

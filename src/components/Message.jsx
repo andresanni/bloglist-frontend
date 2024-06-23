@@ -1,7 +1,9 @@
-const Message = ({ type, message }) => {
-   console.log({type, message}) 
-  const className = type ==="error" ? "error": "success";
-  return <p className={className}>{message}</p>;
+import {useNotification} from '../context/NotificationContext'
+
+const Message = () => {
+  const {state:notification} = useNotification(); 
+  
+  return <p>{notification.message}</p>;
 };
 
 export default Message;

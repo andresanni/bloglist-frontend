@@ -1,17 +1,40 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCreateBlog } from "../hooks/blogs";
-
+import { useNotification } from "../context/NotificationContext";
 
 const NewBlogForm = () => {
   const [blog, setBlog] = useState({ url: "", title: "" });
-  const {mutate: createBlog, isLoading, isError, error, isSuccess} = useCreateBlog();
+  const {
+    mutate: createBlog,
+    isLoading,
+    isError,
+    error,
+    isSuccess,
+  } = useCreateBlog();
 
+  const { setNotification } = useNotification();
+
+  useEffect(()=>{
+    if (isError) {
+      setNotification(error.response.data.error,"error");
+       }
+    if(isSuccess){
+      setNotification("Blogpost Saved")
+    }
+  },[isError, error, isSuccess])
 
   const handleSubmit = (event) => {
     event.preventDefault();
     createBlog(blog);
-    setBlog({ url: "", title: "" });
+    setBlog({ url: "", title: "" });   
+    
   };
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  
 
   return (
     <div>
