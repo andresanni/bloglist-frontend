@@ -1,13 +1,15 @@
 import { useState , useEffect} from "react";
 import { useDeleteBlog, useUpdateBlog } from "../hooks/blogs";
-import { useNotification} from '../context/NotificationContext'
+import { useNotification} from '../context/NotificationContext';
+import { useAuth } from "../context/AuthContext";
 
-const Blog = ({ blog, user }) => {
+const Blog = ({ blog }) => {
 
   const [fullView, setFullView] = useState(false);
   const updateBlogMutation = useUpdateBlog();
   const {isSuccess: deleteSuccess, mutate:deleteMutate} = useDeleteBlog();
   const {setNotification} = useNotification();
+  const { user } = useAuth();
 
   useEffect(()=>{
     if(deleteSuccess){

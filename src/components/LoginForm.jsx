@@ -2,12 +2,14 @@ import { useState } from "react";
 import loginService from "../services/login";
 import { useAuth } from "../context/AuthContext";
 import { useNotification } from "../context/NotificationContext";
+import { useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const { login } = useAuth();
   const { setNotification } = useNotification();
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -17,6 +19,7 @@ const LoginForm = () => {
       setUsername("");
       setPassword("");
       setNotification("Welcome!", "success");
+      navigate("/");
     } catch (exception) {
       setNotification(exception.response.data.error, "error");
       setUsername("");

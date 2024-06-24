@@ -1,7 +1,7 @@
 import { useFetchBlogs } from '../hooks/blogs';
 import Blog from './Blog';
 
-const BlogList = ({ user }) => {
+const BlogList = () => {
   
   const {isLoading, isError, data, error} = useFetchBlogs();
   
@@ -20,8 +20,7 @@ const BlogList = ({ user }) => {
       {blogs.map((blog) => (
         <Blog
           key={blog.id}
-          blog={blog}
-          user = {user}
+          blog={blog}         
         />
       ))}
     </div>
