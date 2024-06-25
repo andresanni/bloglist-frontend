@@ -6,14 +6,15 @@ const NewCommentForm = ( {blog} )=> {
     
     const [comment, setComment] = useState("");
     const { isSuccess, isError, error, mutate} = useUpdateBlog();
-    const {setNotification} = useNotification();
+    const { setNotification } = useNotification();
 
     useEffect(()=>{
         if(isSuccess){
             setComment("");
             setNotification("Comment added", "success")
         }
-    }, [isSuccess])
+    }, [isSuccess]);
+
     const handleChange=(e)=>{
         setComment(e.target.value)
     }
@@ -28,9 +29,9 @@ const NewCommentForm = ( {blog} )=> {
         }
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={ handleSubmit }>
             <input type="text" value={ comment } onChange={ handleChange } />
-            <button disabled={comment.length===0} type="submit">Add comment</button>
+            <button disabled={ comment.length===0 } type="submit">Add comment</button>
         </form>
     )
 }

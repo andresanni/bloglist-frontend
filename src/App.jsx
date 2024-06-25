@@ -8,10 +8,12 @@ import { Route, Routes } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import HomePage from "./components/HomePage";
 import BlogDetails from "./components/BlogDetails";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Container } from "react-bootstrap";
 
 const App = () => {
   return (
-    <>
+    <Container fluid className="m-1">
       <NavBar />
       <Message />
 
@@ -24,7 +26,7 @@ const App = () => {
         <Route path="/users/:id" element={<User />} />
         <Route path="/blogs/:id" element={<BlogDetails />} />
       </Routes>
-    </>
+    </Container>
   );
 };
 
