@@ -1,27 +1,42 @@
-import usersService from '../services/users';
-import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useFetchUsers } from "../hooks/users";
 
 const UsersList = () => {
 
-  const [users, setUsers] = useState([])
+  const {data: users, isLoading, isError, error} = useFetchUsers();
 
-  useEffect(()=>{
-    usersService.getAll().then(data=> setUsers(data))
-  },[])
+  if(isLoading){
+    return <p>is Loading</p>
+  }
 
+  if(isError){
+    <p>Error: {error.message}</p>
+  }
 
+  return (
+    <div>
+      <h2>Users</h2>
 
-
-  return <div>
-    <h2>Users</h2>
-    <ul>
-      {
-        users.map((user) => {
-          return <li key={user.id}>{user.username} {user.blogposts.length}</li>
-        } )
-      }
-    </ul>
-  </div>;
+      <table>
+        <tbody>
+          <tr>
+            <th>Users</th>
+            <th>Blogs created</th>
+          </tr>
+          {users.map((user) => {
+            return (
+              <tr key={user.id}>
+                <td>
+                  <Link to={`/users/${user.id}`}>{user.username}</Link>
+                </td>
+                <td>{user.blogposts.length}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  );
 };
 
 export default UsersList;

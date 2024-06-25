@@ -15,7 +15,7 @@ const NavBar = () => {
     <nav>
       <ul>
         <Link to="/">Home</Link>
-        {user ? (
+        {user.username ? (
           <Link to="/create">Create</Link>
         ) : (
           <Link to="/login">Login</Link>
@@ -23,7 +23,12 @@ const NavBar = () => {
         <Link to="/list">List</Link>
         <Link to="/users">Users</Link>
       </ul>
-      {user && <button onClick={handleLogout}>Logout</button>}
+      {user && (
+        <div>
+          <button onClick={handleLogout}>Logout</button>
+          {user.username}
+        </div>
+      )}
     </nav>
   );
 };

@@ -1,10 +1,10 @@
 import blogService from "../services/blogs";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 
-const useFetchBlogs = () => {
+const useFetchBlogs = (id) => {
   const result = useQuery({
-    queryKey: ["blogs"],
-    queryFn: blogService.getAll,
+    queryKey: id ? ["blogs", id] :["blogs"],
+    queryFn: id ? () => blogService.getById(id) : blogService.getAll,
   });
 
   return result;

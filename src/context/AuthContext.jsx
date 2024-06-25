@@ -7,12 +7,18 @@ import {
 
 const AuthContext = createContext();
 
+const initialState = {
+  id:"",
+  token:"",
+  username:"",
+}
+
 const authReducer = (state, action) => {
   switch (action.type) {
     case "LOGIN":
       return { ...state, user: action.payload };
     case "LOGOUT":
-      return { ...state, user: null };
+      return { ...state, user: initialState };
     default:
       return state;
   }
@@ -23,8 +29,10 @@ const useAuth = () => {
   return context;
 };
 
+
+
 const AuthProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(authReducer, { user: null });
+  const [state, dispatch] = useReducer(authReducer, { user: initialState });
 
   useEffect(() => {
     const user = getUserFromStorage();
