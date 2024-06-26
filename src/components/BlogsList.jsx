@@ -1,3 +1,4 @@
+import { Table } from "react-bootstrap";
 import { useFetchBlogs } from "../hooks/blogs";
 import { Link } from "react-router-dom";
 
@@ -14,10 +15,11 @@ const BlogList = () => {
 
   const blogs = data;
   return (
-    <div>
-      <h2>blogs</h2>
 
-      <table>
+    <div className="d-flex flex-column justify-content-center align-items-center" >
+      <h2 className="mt-4">Blogs</h2>
+
+      <Table striped className="border p-4 rounded shadow mt-4 text-start" style={{ maxWidth: '500px', width: '100%' }}>
         <tbody>
           <tr>
             <th>Title</th>
@@ -30,7 +32,7 @@ const BlogList = () => {
             </tr>
           ))}
         </tbody>
-      </table>
+      </Table>
 
       <ul>{}</ul>
     </div>

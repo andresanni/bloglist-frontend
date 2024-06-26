@@ -3,6 +3,7 @@ import loginService from "../services/login";
 import { useAuth } from "../context/AuthContext";
 import { useNotification } from "../context/NotificationContext";
 import { useNavigate } from "react-router-dom";
+import { Button, Form } from "react-bootstrap";
 
 const LoginForm = () => {
   const [username, setUsername] = useState("");
@@ -28,29 +29,31 @@ const LoginForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      username
-      <input
-        data-testid="username"
-        name="Username"
-        type="text"
-        value={username}
-        onChange={(event) => {
-          setUsername(event.target.value);
-        }}
-      />
-      password
-      <input
-        data-testid="password"
-        name="Password"
-        type="password"
-        value={password}
-        onChange={(event) => {
-          setPassword(event.target.value);
-        }}
-      />
-      <button type="submit">Login</button>
-    </form>
+    <div className="d-flex justify-content-center align-items-center" >
+      <Form onSubmit={handleSubmit} className="border p-4 rounded shadow mt-5" style={{ maxWidth: '400px', width: '100%' }}>
+        <Form.Group className="mb-3" controlId="formUsername">
+          <Form.Label>Username</Form.Label>
+          <Form.Control
+            type="text"
+            value={username}
+            onChange={(event) => {
+              setUsername(event.target.value);
+            }}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="formPassword">
+          <Form.Label>Password</Form.Label>
+          <Form.Control
+            type="password"
+            value={password}
+            onChange={(event) => {
+              setPassword(event.target.value);
+            }}
+          />
+        </Form.Group>
+        <Button type="submit">Login</Button>
+      </Form>
+    </div>
   );
 };
 

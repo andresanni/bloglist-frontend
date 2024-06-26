@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useFetchUsers } from "../hooks/users";
+import { Table } from "react-bootstrap";
 
 const UsersList = () => {
 
@@ -14,10 +15,10 @@ const UsersList = () => {
   }
 
   return (
-    <div>
-      <h2>Users</h2>
+    <div className="d-flex flex-column justify-content-center align-items-center">
+      <h2 className="mt-4">Users</h2>
 
-      <table>
+      <Table striped className="border p-4 rounded shadow mt-4 text-center" style={{ maxWidth: '500px', width: '100%' }}>
         <tbody>
           <tr>
             <th>Users</th>
@@ -34,7 +35,7 @@ const UsersList = () => {
             );
           })}
         </tbody>
-      </table>
+      </Table>
     </div>
   );
 };

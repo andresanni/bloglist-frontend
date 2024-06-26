@@ -14,9 +14,9 @@ const NavBar = () => {
 
   return (
     <>
-      <Navbar expand="lg" className="bg-body-secondary">
+      <Navbar expand="lg" className="bg-body-secondary ms-0 shadow">
         <Container fluid>
-          <Navbar.Brand className="fs-4 fw-bold ms-1 me-2">BlogPosts</Navbar.Brand>
+          <Navbar.Brand className="fs-4 fw-bold ms-1 me-3">BlogPosts</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">

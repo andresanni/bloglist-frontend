@@ -5,10 +5,10 @@ import { useAuth } from "../context/AuthContext";
 import { useFetchBlogs } from "../hooks/blogs";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import NewCommentForm from './NewCommentForm'
+import NewCommentForm from "./NewCommentForm";
+import { Button, ListGroup } from "react-bootstrap";
 
 const BlogDetails = () => {
-    
   const updateBlogMutation = useUpdateBlog();
   const { isSuccess: deleteSuccess, mutate: deleteMutate } = useDeleteBlog();
   const { setNotification } = useNotification();
@@ -47,24 +47,36 @@ const BlogDetails = () => {
     return <p>Error: {error.message}</p>;
   }
   return (
-    <div>
-      <h1>{blog.title}</h1>
-      <p>Url: {blog.url}</p>
-      <p>Likes: {blog.likes}</p>
-      <p>Added by {blog.author.username}</p>
-      <button onClick={handleIncrementLikes}>Like</button>
-      {user.id === blog.author.id && (
-        <button onClick={handleDelete}>Delete</button>
-      )}
-      <h2>Comments</h2>
-      <NewCommentForm blog={ blog }/>
-      <ul>
-        { blog.comments.length>0 ? 
-        blog.comments.map((comment)=><li>{comment}</li>)
-        :
-        <p>No comments yet</p>
-        }
-      </ul>
+    <div className="d-flex flex-column justify-content-center align-items-center ">
+      <div
+        className="border p-4 rounded shadow mt-4 text-center"
+        style={{ maxWidth: "600px", width: "100%" }}
+      >
+        <h1 className="m-1">{blog.title}</h1>
+        <p className="m-2">Url: {blog.url}</p>
+        <p className="m-2">Likes: {blog.likes}</p>
+        <p className="m-2">Added by {blog.author.username}</p>
+
+        <div className="mt-4">
+          <Button onClick={handleIncrementLikes} className="m-2">
+            Like
+          </Button>
+          {user.id === blog.author.id && (
+            <Button onClick={handleDelete}>Delete</Button>
+          )}
+        </div>
+        <div className="mt-4">
+          <NewCommentForm blog={blog} />
+          <h5 className="text-start m-2">Comments</h5>
+          <ListGroup className="pt-2" variant="flush">
+            {blog.comments.length > 0 ? (
+              blog.comments.map((comment) => <ListGroup.Item>{comment}</ListGroup.Item>)
+            ) : (
+              <p>No comments yet</p>
+            )}
+          </ListGroup>
+        </div>
+      </div>
     </div>
   );
 };
